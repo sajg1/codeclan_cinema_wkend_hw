@@ -71,13 +71,4 @@ class Ticket
     result = SqlRunner.run(sql, values).first
     return Ticket.new(result)
   end
-
-# I want to change this so the film class has a function to check how many viewers it had.
-  def self.viewers(film)
-    film.customers.count
-  end
-
-
-
-
 end
