@@ -10,6 +10,7 @@ class Film
     @title = options['title']
     @price = options['price'].to_i
     @id = options['id'] if options ['id']
+    @customers = []
   end
 
 #CREATE
@@ -57,6 +58,11 @@ class Film
     customers = SqlRunner.run(sql, values)
     return customers.map {|customer| Customer.new(customer)}
   end
+
+  def viewers()
+    customers.count
+  end
+
 
 #READ
   def self.all()

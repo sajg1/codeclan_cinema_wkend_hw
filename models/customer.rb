@@ -1,4 +1,6 @@
 require_relative('../db/sql_runner')
+require_relative('film')
+require_relative('ticket')
 
 class Customer
 
@@ -9,6 +11,7 @@ class Customer
     @name = options['name']
     @funds = options['funds'].to_i
     @id = options['id'] if options['id']
+    @tickets = []
   end
 
 #CREATE
@@ -58,18 +61,35 @@ class Customer
     return films.map {|film| Film.new(film)}
   end
 
-  def pay()
-    sql = "SELECT films.price FROM films
-    INNER JOIN tickets
-    ON tickets.film_id = films.id
-    WHERE customer_id = $1;"
-    values = [@id]
-    film_price_hash = SqlRunner.run(sql, values).first
-    film_price = film_price_hash['price'].to_i
-    return "Sorry, thats not enough" if @funds < film_price
-    @funds -= film_price
-    return "You have paid for the film. Your new balance is #{@funds}"
+  def buy_ticket(film)
+    return if @funds < film.price
+    ticket = Ticket.new({'customer_id' => @id, 'film_id' => film.id})
+    ticket.save()
+    @funds -= film.price
+    update()
+    tickets = []
+    @tickets << ticket
   end
+
+  def tickets_bought()
+    @tickets.count
+  end
+
+# First attempt at buy_ticket
+  #   # sql = "SELECT films.price FROM films
+  #   # INNER JOIN tickets
+  #   # ON tickets.film_id = films.id
+  #   # WHERE customer_id = $1;"
+  #   sql = "SELECT price FROM films
+  #   WHERE id = $1"
+  #   values = [film.id]
+  #   # values = [@id]
+  #   film_price_hash = SqlRunner.run(sql, values).first
+  #   film_price = film_price_hash['price'].to_i
+  #   return "Sorry, thats not enough" if @funds < film_price
+  #   @funds -= film_price
+  #   return "You have paid for the film. Your new balance is #{@funds}"
+  # end
 
 
 

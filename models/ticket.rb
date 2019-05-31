@@ -50,8 +50,6 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
-
-
 #READ
 
   def self.all()
@@ -74,10 +72,7 @@ class Ticket
     return Ticket.new(result)
   end
 
-  def self.bought(customer)
-    customer.films.count
-  end
-
+# I want to change this so the film class has a function to check how many viewers it had.
   def self.viewers(film)
     film.customers.count
   end
