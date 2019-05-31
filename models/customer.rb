@@ -58,6 +58,8 @@ class Customer
     return films.map {|film| Film.new(film)}
   end
 
+
+
 #READ
   def self.all()
     sql = "SELECT * FROM customers"

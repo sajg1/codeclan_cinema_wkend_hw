@@ -74,6 +74,14 @@ class Ticket
     return Ticket.new(result)
   end
 
+  def self.bought(customer)
+    customer.films.count
+  end
+
+  def self.viewers(film)
+    film.customers.count
+  end
+
 
 
 
