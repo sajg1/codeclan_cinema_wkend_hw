@@ -58,6 +58,19 @@ class Customer
     return films.map {|film| Film.new(film)}
   end
 
+  def pay()
+    sql = "SELECT films.price FROM films
+    INNER JOIN tickets
+    ON tickets.film_id = films.id
+    WHERE customer_id = $1;"
+    values = [@id]
+    film_price_hash = SqlRunner.run(sql, values).first
+    film_price = film_price_hash['price'].to_i
+    return "Sorry, thats not enough" if @funds < film_price
+    @funds -= film_price
+    return "You have paid for the film. Your new balance is #{@funds}"
+  end
+
 
 
 #READ
